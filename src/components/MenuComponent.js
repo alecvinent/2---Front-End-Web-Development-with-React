@@ -9,12 +9,23 @@ import {
 } from "reactstrap";
 
 class MenuComponent extends Component {
+  //   constructor
   constructor(props) {
     super(props);
     this.state = {
       selectedDish: null,
     };
   }
+
+  componentDidMount() {
+    console.log("MenuComponent mounted");
+  }
+
+  componentWillUnmount(){
+    console.log("MenuComponent unmounted");
+  }
+
+  //
 
   onDishSelected(dish) {
     console.log(dish);
