@@ -7,28 +7,28 @@ import {
   CardText,
   CardTitle,
 } from "reactstrap";
+import DishDetail from "./DishDetailComponent";
 
 class MenuComponent extends Component {
   //   constructor
   constructor(props) {
     super(props);
     this.state = {
-      selectedDish: null,
+      selectedDish: null
     };
   }
 
   componentDidMount() {
-    console.log("MenuComponent mounted");
+    // console.log("MenuComponent mounted");
   }
 
   componentWillUnmount(){
-    console.log("MenuComponent unmounted");
+    // console.log("MenuComponent unmounted");
   }
 
   //
 
   onDishSelected(dish) {
-    console.log(dish);
     this.setState({
       selectedDish: dish,
     });
@@ -66,9 +66,7 @@ class MenuComponent extends Component {
     return (
       <div className="container">
         <div className="row mt-5">{menu}</div>
-        <div className="row mt-5">
-          {this.renderDish(this.state.selectedDish)}
-        </div>
+        <DishDetail selectedDish={this.state.selectedDish} />
       </div>
     );
   }
