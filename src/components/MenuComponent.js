@@ -9,31 +9,18 @@ import {
 } from "reactstrap";
 import DishDetail from "./DishDetailComponent";
 
-class MenuComponent extends Component {
-  //   constructor
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedDish: null
-    };
-  }
+
+class Menu extends Component {
 
   componentDidMount() {
-    // console.log("MenuComponent mounted");
+    console.log("Menu mounted");
   }
 
   componentWillUnmount(){
-    // console.log("MenuComponent unmounted");
+    console.log("Menu unmounted");
   }
 
   //
-
-  onDishSelected(dish) {
-    this.setState({
-      selectedDish: dish,
-    });
-  }
-
   renderDish(dish) {
     if (dish == null) {
       return <div />;
@@ -54,7 +41,7 @@ class MenuComponent extends Component {
     const menu = this.props.dishes.map((dish) => {
       return (
         <div key={dish.id} className="col-12 col-md-5 m-1 mt-3">
-          <Card onClick={() => this.onDishSelected(dish)}>
+          <Card onClick={() => this.props.onClick(dish.id)}>
             <CardImg width="100%" src={dish.image} alt={dish.name} />
             <CardImgOverlay>
               <CardTitle>{dish.name}</CardTitle>
@@ -66,10 +53,9 @@ class MenuComponent extends Component {
     return (
       <div className="container">
         <div className="row mt-5">{menu}</div>
-        <DishDetail selectedDish={this.state.selectedDish} />
       </div>
     );
   }
 }
 
-export default MenuComponent;
+export default Menu;

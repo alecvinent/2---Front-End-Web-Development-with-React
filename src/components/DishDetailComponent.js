@@ -6,14 +6,14 @@ class DishDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      comments: []
+      comments: [],
     };
   }
 
   componentWillMount() {
     //   generate random comments
     for (let index = 0; index < 5; index++) {
-      const date_options = { year: "numeric", month: "long", day: "numeric" };
+      const date_options = { year: "numeric", month: "short", day: "2-digit" };
       const comment = {
         id: random.uuid(),
         author: name.findName(),
@@ -31,10 +31,14 @@ class DishDetail extends React.Component {
     return this.renderDish(this.props.selectedDish);
   }
 
-  renderDish(dish) {
-    if (dish == null) {
+  renderDish(dishId) {
+    if (dishId == null) {
       return <div />;
     }
+
+    const dish = this.props.dishes[dishId];
+    console.log(dishId);
+    console.log(dish);
 
     return (
       <div className="row mt-5">
