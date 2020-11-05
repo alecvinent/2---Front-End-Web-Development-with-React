@@ -7,7 +7,6 @@ import {
   CardText,
   CardTitle,
 } from "reactstrap";
-import DishDetail from "./DishDetailComponent";
 
 
 class Menu extends Component {

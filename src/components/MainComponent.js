@@ -15,10 +15,15 @@ class Main extends Component {
     };
   }
 
-  onDishSelected(dishId) {
+  onDishSelect(dishId) {
     this.setState({
       selectedDish: dishId,
     });
+  }
+  
+  getSelectedDish(){
+    const dish = this.state.dishes.filter((dish) => dish.id === this.state.selectedDish);
+    return dish[0];
   }
 
   render() {
@@ -35,15 +40,8 @@ class Main extends Component {
             </NavbarBrand>
           </div>
         </Navbar>
-        <Menu
-          dishes={this.state.dishes}
-          onClick={(dishId) => this.onDishSelected(dishId)}
-        />
-        <DishDetail
-          dish={this.state.dishes.filter(
-            (dish) => dish.id === this.state.selectedDish
-          )[0]}
-        />
+        <Menu dishes={this.state.dishes} onClick={(dishId) => this.onDishSelect(dishId)} />
+        <DishDetail dish={this.getSelectedDish()} />
       </div>
     );
   }

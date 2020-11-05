@@ -10,35 +10,42 @@ class DishDetail extends React.Component {
     };
   }
 
-  componentWillMount() {
-    //   generate random comments
-    for (let index = 0; index < 5; index++) {
-      const date_options = { year: "numeric", month: "short", day: "2-digit" };
-      const comment = {
-        id: random.uuid(),
-        author: name.findName(),
-        date: date.recent().toLocaleDateString("en-US", date_options),
-        description: lorem.lines(2),
-      };
-
-      this.setState((prevState) => ({
-        comments: [...prevState.comments, comment],
-      }));
+  componentDidUpdate(prevProps){
+    if (this.props.dish !== prevProps.dish) {
+      this.setState({
+        comments: this.generateComments(this.props.dish)
+      });
     }
+  }
+
+  generateComments(dish){
+    const comments = [];
+    if (dish != null) {
+      const dish = this.props.dish;
+      for (let index = 0; index < 5; index++) {
+        const date_options = { year: "numeric", month: "short", day: "2-digit" };
+        const comment = {
+          id: random.uuid(),
+          author: name.findName(),
+          date: date.recent(5).toLocaleDateString("en-US", date_options),
+          description: lorem.lines(2),
+          dishId: dish.id
+        };
+  
+        comments.push(comment);
+      }
+    }   
+    return comments;
   }
 
   render() {
-    return this.renderDish(this.props.selectedDish);
+    return this.renderDish(this.props.dish);
   }
 
-  renderDish(dishId) {
-    if (dishId == null) {
+  renderDish(dish) {
+    if (dish == null) {
       return <div />;
     }
-
-    const dish = this.props.dishes[dishId];
-    console.log(dishId);
-    console.log(dish);
 
     return (
       <div className="row mt-5">
@@ -58,13 +65,14 @@ class DishDetail extends React.Component {
               about <em>{dish.name}</em>
             </h4>
           </div>
-          <div>{this.renderComments(this.state.comments)}</div>
+          <div>{this.renderComments(dish)}</div>
         </div>
       </div>
     );
   }
 
-  renderComments(comments) {
+  renderComments(dish) {
+    const comments = this.state.comments;
     if (comments == null) {
       return <div />;
     }
