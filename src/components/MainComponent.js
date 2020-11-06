@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { Navbar, NavbarBrand } from "reactstrap";
+
 import Menu from "./MenuComponent";
+import Header from "./HeaderComponent";
+import Footer from "./FooterComponent";
 import DishDetail from "./DishDetailComponent";
 import { DISHES } from "../shared/dishes";
 
@@ -27,21 +29,15 @@ class Main extends Component {
   }
 
   render() {
-
-    const logo = "./assets/images/logo.png";
-    const title = "Ristorante Con Fusion";
-
     return (
       <div>
-        <Navbar dark color="primary" expand="sm" fixed="top">
-          <div className="container">
-            <NavbarBrand href="/">
-              <img src={logo} alt={title} height="30" width="41" />
-            </NavbarBrand>
-          </div>
-        </Navbar>
+        <Header />
         <Menu dishes={this.state.dishes} onClick={(dishId) => this.onDishSelect(dishId)} />
+        
+        {/* main content */}
         <DishDetail dish={this.getSelectedDish()} />
+        {/* main content */}
+        <Footer />
       </div>
     );
   }

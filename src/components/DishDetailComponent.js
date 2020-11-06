@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardBody, CardImg, CardText, CardTitle } from "reactstrap";
 import { date, lorem, random, name } from "faker";
 
-// 
+//
 function generateComments(dish) {
   const comments = [];
   if (dish != null) {
@@ -22,7 +22,7 @@ function generateComments(dish) {
   return comments;
 }
 
-// 
+//
 function RenderDish({ dish }) {
   return (
     <div className="col-12 col-sm-12 col-md-5 m-1">
@@ -37,7 +37,7 @@ function RenderDish({ dish }) {
   );
 }
 
-// 
+//
 function RenderComments({ dish }) {
   const comments = dish.comments;
 
@@ -80,9 +80,11 @@ const DishDetail = (props) => {
   dish.comments = generateComments(dish);
 
   return (
-    <div className="row mt-5">
-      <RenderDish dish={dish} />
-      <RenderComments dish={dish} />
+    <div className="container">
+      <div className="row mt-5">
+        <RenderDish dish={dish} />
+        <RenderComments dish={dish} />
+      </div>
     </div>
   );
 };
