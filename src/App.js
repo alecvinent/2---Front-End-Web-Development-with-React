@@ -1,18 +1,21 @@
+// components
 import React, { Component } from 'react';
 import Main from "./components/MainComponent";
+import { BrowserRouter } from "react-router-dom";
+
+
+// css
 import './App.css';
 
-const logo = './assets/images/logo.png';
-const title = 'Ristorante Con Fusion';
-
+// 
 class App extends Component {
 
   render() {
 
     return (
-      <div className="App">
+      <BrowserRouter>
         <Main />
-      </div>
+      </BrowserRouter>
     );
   }
 }

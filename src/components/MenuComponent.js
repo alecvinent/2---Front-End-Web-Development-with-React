@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, CardImg, CardImgOverlay, CardTitle } from "reactstrap";
+import DishDetail from "./DishDetailComponent";
 
 //
 function RenderMenuItem({ dish, onClick }) {
@@ -22,9 +23,18 @@ const Menu = (props) => {
       </div>
     );
   });
+
+  //
+  function getSelectedDish(){
+    const dish = props.dishes.filter((dish) => dish.id === props.selectedDish);
+    return dish[0];
+  }
+  // 
+
   return (
     <div className="container">
       <div className="row mt-5">{menu}</div>
+      <DishDetail dish={getSelectedDish()} />
     </div>
   );
 };

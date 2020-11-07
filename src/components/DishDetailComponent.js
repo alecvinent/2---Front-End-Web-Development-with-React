@@ -80,12 +80,10 @@ const DishDetail = (props) => {
   dish.comments = generateComments(dish);
 
   return (
-    <div className="container">
-      <div className="row mt-5">
+    <div className="row mt-5">
         <RenderDish dish={dish} />
         <RenderComments dish={dish} />
       </div>
-    </div>
   );
 };
 export default DishDetail;
