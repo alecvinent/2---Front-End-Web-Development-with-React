@@ -51,9 +51,12 @@ class Main extends Component {
 
     //
     const AboutPage = () => {
-      return (
-        <About leaders={this.state.leaders} />
-      );
+      return <About leaders={this.state.leaders} />;
+    };
+
+    //
+    const ContactPage = () => {
+      return <Contact />;
     };
 
     //
@@ -64,7 +67,6 @@ class Main extends Component {
         {/* main content */}
         <Switch>
           <Route path="/home" component={HomePage} />
-         
 
           {/* menu */}
           <Route
@@ -80,12 +82,11 @@ class Main extends Component {
           <Route path="/menu/:dishId" component={DishWithId} />
           {/* ./ menu */}
 
-          <Route path="/contactus" />
+          <Route path="/contactus" component={ContactPage} />
           <Route path="/aboutus" component={AboutPage} />
 
           {/* others */}
           <Redirect to="/home" />
-          
         </Switch>
         {/* main content */}
         <Footer />
