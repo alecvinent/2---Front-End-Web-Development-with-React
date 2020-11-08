@@ -1,15 +1,25 @@
 import React from "react";
-import { Card, CardImg, CardImgOverlay, CardTitle } from "reactstrap";
-import DishDetail from "./DishDetailComponent";
+import {
+  Card,
+  CardImg,
+  CardImgOverlay,
+  CardTitle,
+  Breadcrumb,
+  BreadcrumbItem,
+} from "reactstrap";
+import { Link } from "react-router-dom";
 
 //
 function RenderMenuItem({ dish, onClick }) {
+
   return (
-    <Card onClick={() => onClick(dish.id)}>
-      <CardImg width="100%" src={dish.image} alt={dish.name} />
-      <CardImgOverlay>
-        <CardTitle>{dish.name}</CardTitle>
-      </CardImgOverlay>
+    <Card>
+      <Link to={{ pathname: "/menu/" + dish.id }}>
+        <CardImg width="100%" src={dish.image} alt={dish.name} />
+        <CardImgOverlay>
+          <CardTitle>{dish.name}</CardTitle>
+        </CardImgOverlay>
+      </Link>
     </Card>
   );
 }
@@ -24,17 +34,27 @@ const Menu = (props) => {
     );
   });
 
+  
   //
-  function getSelectedDish(){
-    const dish = props.dishes.filter((dish) => dish.id === props.selectedDish);
-    return dish[0];
-  }
-  // 
-
   return (
     <div className="container">
+      <div className="row">
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <Link to="/home">
+              <i className="fa fa-home" aria-hidden="true"></i>
+            </Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem active>
+            Menu
+          </BreadcrumbItem>
+        </Breadcrumb>
+        <div className="col-12">
+          <h3>Menu</h3>
+          <hr />
+        </div>
+      </div>
       <div className="row mt-5">{menu}</div>
-      <DishDetail dish={getSelectedDish()} />
     </div>
   );
 };

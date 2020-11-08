@@ -27,6 +27,8 @@ class Header extends Component {
   }
 
   render() {
+    const logo = './assets/images/logo.png';
+
     return (
       <React.Fragment>
         {/* navbar */}
@@ -39,7 +41,7 @@ class Header extends Component {
               className="mr-auto"
             >
               <img
-                src="./assets/images/logo.png"
+                src={`/${logo}`}
                 alt="Ristorante Con Fusion"
                 height="30"
                 width="41"

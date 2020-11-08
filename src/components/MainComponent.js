@@ -10,6 +10,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { DISHES } from "../shared/dishes";
 import { LEADERS } from "../shared/leaders";
 import { PROMOTIONS } from "../shared/promotions";
+import DishDetail from "./DishDetailComponent";
 
 class Main extends Component {
   constructor(props) {
@@ -17,16 +18,9 @@ class Main extends Component {
 
     this.state = {
       dishes: DISHES,
-      selectedDish: null,
       leaders: LEADERS,
       promotions: PROMOTIONS,
     };
-  }
-
-  onDishSelect(dishId) {
-    this.setState({
-      selectedDish: dishId,
-    });
   }
 
   render() {
@@ -40,6 +34,12 @@ class Main extends Component {
       );
     };
 
+    const DishWithId = ({match}) => {
+      return (
+        <DishDetail dish={this.state.dishes.filter((dish) => dish.id === parseInt(match.params.dishId, 10))[0]} />
+      );
+    };
+
     return (
       <div>
         <Header />
@@ -47,6 +47,8 @@ class Main extends Component {
         {/* main content */}
         <Switch>
           <Route path="/home" component={HomePage}></Route>
+
+          {/* menu */}
           <Route
             exact
             path="/menu"
@@ -54,10 +56,12 @@ class Main extends Component {
               <Menu
                 dishes={this.state.dishes}
                 onClick={(dishId) => this.onDishSelect(dishId)}
-                selectedDish={this.state.selectedDish}
               />
             )}
           ></Route>
+          <Route path="/menu/:dishId" component={DishWithId} />
+          {/* ./ menu */}
+
           <Route path="/contactus" component={HomePage}>
             <Contact />
           </Route>
