@@ -3,7 +3,6 @@ import Menu from "./MenuComponent";
 import Header from "./HeaderComponent";
 import Footer from "./FooterComponent";
 import Home from "./HomeComponent";
-import Contact from "./ContactComponent";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 // shared
@@ -11,6 +10,8 @@ import { DISHES } from "../shared/dishes";
 import { LEADERS } from "../shared/leaders";
 import { PROMOTIONS } from "../shared/promotions";
 import DishDetail from "./DishDetailComponent";
+import Contact from "./ContactComponent";
+import About from "./AboutComponent";
 
 class Main extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class Main extends Component {
   }
 
   render() {
+    //
     const HomePage = () => {
       return (
         <Home
@@ -34,19 +36,35 @@ class Main extends Component {
       );
     };
 
-    const DishWithId = ({match}) => {
+    //
+    const DishWithId = ({ match }) => {
       return (
-        <DishDetail dish={this.state.dishes.filter((dish) => dish.id === parseInt(match.params.dishId, 10))[0]} />
+        <DishDetail
+          dish={
+            this.state.dishes.filter(
+              (dish) => dish.id === parseInt(match.params.dishId, 10)
+            )[0]
+          }
+        />
       );
     };
 
+    //
+    const AboutPage = () => {
+      return (
+        <About leaders={this.state.leaders} />
+      );
+    };
+
+    //
     return (
       <div>
         <Header />
 
         {/* main content */}
         <Switch>
-          <Route path="/home" component={HomePage}></Route>
+          <Route path="/home" component={HomePage} />
+         
 
           {/* menu */}
           <Route
@@ -62,10 +80,12 @@ class Main extends Component {
           <Route path="/menu/:dishId" component={DishWithId} />
           {/* ./ menu */}
 
-          <Route path="/contactus" component={HomePage}>
-            <Contact />
-          </Route>
+          <Route path="/contactus" />
+          <Route path="/aboutus" component={AboutPage} />
+
+          {/* others */}
           <Redirect to="/home" />
+          
         </Switch>
         {/* main content */}
         <Footer />
