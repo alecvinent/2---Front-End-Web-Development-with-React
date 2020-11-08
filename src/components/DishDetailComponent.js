@@ -1,26 +1,5 @@
 import React from "react";
 import { Card, CardBody, CardImg, CardText, CardTitle } from "reactstrap";
-import { date, lorem, random, name } from "faker";
-
-//
-function generateComments(dish) {
-  const comments = [];
-  if (dish != null) {
-    for (let index = 0; index < 5; index++) {
-      const date_options = { year: "numeric", month: "short", day: "2-digit" };
-      const comment = {
-        id: random.uuid(),
-        author: name.findName(),
-        date: date.recent(5).toLocaleDateString("en-US", date_options),
-        description: lorem.lines(2),
-        dishId: dish.id,
-      };
-
-      comments.push(comment);
-    }
-  }
-  return comments;
-}
 
 //
 function RenderDish({ dish }) {
@@ -38,6 +17,15 @@ function RenderDish({ dish }) {
 }
 
 //
+function renderRating(rating) {
+  var stars = [];
+  for (let index = 0; index < rating; index++) {
+    stars.push(<i key={index} className="fa fa-star" aria-hidden="true"></i>);
+  }
+  return stars;
+}
+
+//
 function RenderComments({ dish }) {
   const comments = dish.comments;
 
@@ -50,7 +38,14 @@ function RenderComments({ dish }) {
       <div>
         <h4>
           <i className="fa fa-comment-o" aria-hidden="true"></i> Comments about{" "}
-          <em>{dish.name}</em>
+          <em>
+            {dish.featured ? (
+              <i className="fa fa-star" aria-hidden="true"></i>
+            ) : (
+              ""
+            )}{" "}
+            {dish.name}
+          </em>
         </h4>
       </div>
       <div>
@@ -61,6 +56,7 @@ function RenderComments({ dish }) {
               <p>
                 -- {comment.author}, {comment.date}
               </p>
+              <p>Rating: {renderRating(comment.rating)} </p>
             </li>
           ))}
         </ul>
@@ -77,13 +73,11 @@ const DishDetail = (props) => {
     return <div />;
   }
 
-  dish.comments = generateComments(dish);
-
   return (
     <div className="row mt-5">
-        <RenderDish dish={dish} />
-        <RenderComments dish={dish} />
-      </div>
+      <RenderDish dish={dish} />
+      <RenderComments dish={dish} />
+    </div>
   );
 };
 export default DishDetail;

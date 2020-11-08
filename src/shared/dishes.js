@@ -1,3 +1,6 @@
+// import { random } from "faker";
+import { getComments } from "./comments";
+
 export const DISHES = [
   {
     id: 0,
@@ -6,8 +9,10 @@ export const DISHES = [
     category: "mains",
     label: "Hot",
     price: "4.99",
+    featured: true,
     description:
       "A unique combination of Indian Uthappam (pancake) and Italian pizza, topped with Cerignola olives, ripe vine cherry tomatoes, Vidalia onion, Guntur chillies and Buffalo Paneer.",
+    comments: getComments(0),
   },
   {
     id: 1,
@@ -16,8 +21,10 @@ export const DISHES = [
     category: "appetizer",
     label: "",
     price: "1.99",
+    featured: false,
     description:
       "Deep fried Zucchini coated with mildly spiced Chickpea flour batter accompanied with a sweet-tangy tamarind sauce",
+    comments: getComments(1),
   },
   {
     id: 2,
@@ -26,8 +33,10 @@ export const DISHES = [
     category: "appetizer",
     label: "New",
     price: "1.99",
+    featured: false,
     description:
       "A quintessential ConFusion experience, is it a vada or is it a donut?",
+    comments: getComments(2),
   },
   {
     id: 3,
@@ -36,7 +45,9 @@ export const DISHES = [
     category: "dessert",
     label: "",
     price: "2.99",
+    featured: false,
     description:
       "A delectable, semi-sweet New York Style Cheese Cake, with Graham cracker crust and spiced with Indian cardamoms",
+    comments: getComments(3),
   },
 ];
