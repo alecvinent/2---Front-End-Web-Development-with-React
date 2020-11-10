@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import { Breadcrumb, BreadcrumbItem, Col, Row } from "reactstrap";
-import {
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  FormText,
-  FormFeedback,
-} from "reactstrap";
+import { Button, Label, FormText } from "reactstrap";
 import { Link } from "react-router-dom";
 import { Control, LocalForm, Errors } from "react-redux-form";
 
+// custom validators
+const required = (val) => val && val.length;
+const maxLength = (len) => (val) => !(val) || (val.length <= len);
+const minLength = (len) => (val) => val && (val.length >= len);
+const isNumber = (val) => !isNaN(Number(val));
+const validEmail = (val) =>  /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
+
+//
 class Contact extends Component {
   //
   constructor(props) {
@@ -113,10 +113,26 @@ class Contact extends Component {
                     className="form-control"
                     placeholder="First Name"
                     aria-describedby="firstname-help"
+                    validators={{
+                      required, minLength: minLength(3), maxLength: maxLength(15)
+                    }}
+                    errors={{
+                      required: (val) => !val || !val.length
+                    }}
                   />
                   <FormText color="muted" id="firstname-help">
                     Help text
                   </FormText>
+                  <Errors
+                    className="text-danger"
+                    model=".firstname"
+                    show="touched"
+                    messages={{
+                      required: "Required",
+                      minLength: "Must be greather than 2 characters",
+                      maxLength: "Must be 15 characters or less",
+                    }}
+                  />
                 </Col>
               </Row>
 
@@ -131,10 +147,23 @@ class Contact extends Component {
                     name="lastname"
                     className="form-control"
                     placeholder="Last Name"
+                    validators={{
+                      required, minLength: minLength(3), maxLength: maxLength(15)
+                    }}
                   />
                   <FormText color="muted" id="lastname-help">
                     Help text
                   </FormText>
+                  <Errors
+                    className="text-danger"
+                    model=".lastname"
+                    show="touched"
+                    messages={{
+                      required: "Required",
+                      minLength: "Must be greather than 2 characters",
+                      maxLength: "Must be 15 characters or less",
+                    }}
+                  />
                 </Col>
               </Row>
 
@@ -149,10 +178,26 @@ class Contact extends Component {
                     name="telnum"
                     className="form-control"
                     placeholder="Tel. number"
+                    validators={{
+                      required, isNumber,
+                      minLength: minLength(3),
+                      maxLength: maxLength(15),
+                    }}
                   />
                   <FormText color="muted" id="telnum-help">
                     Format: +5353793780, +53 53793780, +53-53793780
                   </FormText>
+                  <Errors
+                    className="text-danger"
+                    model=".telnum"
+                    show="touched"
+                    messages={{
+                      required: "Required",
+                      minLength: "Must be greather than 2 numbers",
+                      maxLength: "Must be 15 numbers or less",
+                      isNumber: 'Must be a valid telephone number'
+                    }}
+                  />
                 </Col>
               </Row>
 
@@ -167,10 +212,23 @@ class Contact extends Component {
                     name="email"
                     className="form-control"
                     placeholder="Email"
+                    validators={{
+                      required, validEmail, 
+                      minLength: minLength(8)
+                    }}
                   />
                   <FormText color="muted" id="email-help">
                     Help text
                   </FormText>
+                  <Errors
+                    className="text-danger"
+                    model=".email"
+                    show="touched"
+                    messages={{
+                      validEmail: 'Not a valid email',
+                      minLength: 'Email is too short'
+                    }}
+                  />
                 </Col>
               </Row>
 
@@ -214,10 +272,25 @@ class Contact extends Component {
                     placeholder="Message"
                     aria-describedby="message-help"
                     rows="12"
+                    validators={{
+                      required,
+                      minLength: minLength(3),
+                      maxLength: maxLength(15),
+                    }}
                   />
                   <FormText color="muted" id="message-help">
                     Help text
                   </FormText>
+                  <Errors
+                    className="text-danger"
+                    model=".message"
+                    show="touched"
+                    messages={{
+                      required: "Required",
+                      minLength: "Must be greather than 2 characters",
+                      maxLength: "Must be 15 characters or less",
+                    }}
+                  />
                 </Col>
               </Row>
 
@@ -226,13 +299,6 @@ class Contact extends Component {
                   <Button type="submit" color="primary">
                     Send Feedback
                   </Button>
-                  <Control.button
-                    model="."
-                    disabled={{ valid: false }}
-                    color="primary"
-                  >
-                    Send Feedback 2
-                  </Control.button>
                 </Col>
               </Row>
             </LocalForm>
