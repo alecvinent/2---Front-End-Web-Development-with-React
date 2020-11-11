@@ -18,6 +18,7 @@ class Contact extends Component {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    // localStorage.setItem('x','xxxx');
   }
 
   //
