@@ -9,14 +9,20 @@ import {
   BreadcrumbItem,
   Label,
   FormGroup,
-  Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "reactstrap";
 import { Link } from "react-router-dom";
 import { Control, LocalForm, Errors } from "react-redux-form";
+import { Loading } from "./LoadingComponent";
 
 // custom validators
 const required = (val) => val && val.length;
-const maxLength = (len) => (val) => !(val) || (val.length <= len);
-const minLength = (len) => (val) => val && (val.length > len);
+const maxLength = (len) => (val) => !val || val.length <= len;
+const minLength = (len) => (val) => val && val.length > len;
 const required_option = (val) => val && val > 0;
 
 //
@@ -45,7 +51,6 @@ function renderRating(rating) {
 
 //
 function RenderComments({ comments, dish, addComment }) {
-  
   //
   return (
     <div className="col-12 col-sm-12 col-md-5 m-1">
@@ -104,13 +109,18 @@ class CommentForm extends Component {
   handleSubmit(values) {
     this.toggleModal();
     console.log("current state is:" + JSON.stringify(values));
-    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+    this.props.addComment(
+      this.props.dishId,
+      values.rating,
+      values.author,
+      values.comment
+    );
   }
 
   render() {
     return (
       <React.Fragment>
-        <div className="col-12 col-sm-12 col-md-5 m-1">
+        <div className="col-12 col-sm-12 col-md m-1">
           <Button outline onClick={this.toggleModal}>
             <i className="fa fa-pencil" aria-hidden="true"></i> Submit Comment
           </Button>
@@ -118,18 +128,20 @@ class CommentForm extends Component {
 
         {/* modal */}
 
-        
         <Modal isOpen={this.state.isModalCommentOpen} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>Submit Comment</ModalHeader>
-          <LocalForm onSubmit={v => this.handleSubmit(v)}>
+          <LocalForm onSubmit={(v) => this.handleSubmit(v)}>
             <ModalBody>
-            
-            <FormGroup>
+              <FormGroup>
                 <Label htmlFor="rating">Rating</Label>
-                <Control.select model=".rating" name="rating" id="rating"  className="form-control" 
-                 validators={{
-                  required_option
-                }}
+                <Control.select
+                  model=".rating"
+                  name="rating"
+                  id="rating"
+                  className="form-control"
+                  validators={{
+                    required_option,
+                  }}
                 >
                   <option value="-1">---Select rate--</option>
                   <option value="1">1</option>
@@ -139,54 +151,66 @@ class CommentForm extends Component {
                   <option value="5">5</option>
                 </Control.select>
                 <Errors
-                    className="text-danger"
-                    model=".rating"
-                    show="touched"
-                    messages={{
-                      required_option: "Please, select a rate",
-                    }}
-                  />
+                  className="text-danger"
+                  model=".rating"
+                  show="touched"
+                  messages={{
+                    required_option: "Please, select a rate",
+                  }}
+                />
               </FormGroup>
 
               <FormGroup>
                 <Label htmlFor="author">Your Name</Label>
-                <Control.text model=".author" type="text" name="author" id="author" className="form-control" placeholder="Your Name"
-                validators={{
-                  minLength: minLength(2), maxLength: maxLength(15)
-                }}
+                <Control.text
+                  model=".author"
+                  type="text"
+                  name="author"
+                  id="author"
+                  className="form-control"
+                  placeholder="Your Name"
+                  validators={{
+                    minLength: minLength(2),
+                    maxLength: maxLength(15),
+                  }}
                 />
                 <Errors
-                    className="text-danger"
-                    model=".author"
-                    show="touched"
-                    messages={{
-                      minLength: "Must be greather than 2 characters",
-                      maxLength: "Must be 15 characters or less",
-                    }}
-                  />
+                  className="text-danger"
+                  model=".author"
+                  show="touched"
+                  messages={{
+                    minLength: "Must be greather than 2 characters",
+                    maxLength: "Must be 15 characters or less",
+                  }}
+                />
               </FormGroup>
-              
+
               <FormGroup>
                 <Label htmlFor="comment">Comment</Label>
-                <Control.textarea model=".comment" name="comment" id="comment" className="form-control" rows="6"
-                validators={{
-                  required
-                }}
+                <Control.textarea
+                  model=".comment"
+                  name="comment"
+                  id="comment"
+                  className="form-control"
+                  rows="6"
+                  validators={{
+                    required,
+                  }}
                 />
                 <Errors
-                    className="text-danger"
-                    model=".comment"
-                    show="touched"
-                    messages={{
-                      required: "Required",
-                    }}
-                  />
+                  className="text-danger"
+                  model=".comment"
+                  show="touched"
+                  messages={{
+                    required: "Required",
+                  }}
+                />
               </FormGroup>
-              
-            
             </ModalBody>
             <ModalFooter className="justify-content-start">
-              <Button color="primary" type="submit">Submit</Button>
+              <Button color="primary" type="submit">
+                Submit
+              </Button>
             </ModalFooter>
           </LocalForm>
         </Modal>
@@ -199,16 +223,39 @@ class CommentForm extends Component {
 export { CommentForm };
 
 // DishDetail component
-class DishDetail extends Component {
+const DishDetail = (props) => {
   //
-  render() {
-    const dish = this.props.dish;
-    const comments = this.props.comments;
+  const dish = props.dish;
+  const comments = props.comments;
 
-    if (dish == null) {
-      return <div />;
-    }
+  if (dish == null) {
+    return (
+      <div className="container">
+        <div className="row">
+          <Loading />
+        </div>
+      </div>
+    );
+  }
 
+  //
+  if (props.isLoading) {
+    return (
+      <div className="container">
+        <div className="row">
+          <Loading />
+        </div>
+      </div>
+    );
+  } else if (props.errorMessage) {
+    return (
+      <div className="container">
+        <div className="row">
+          <h4>{props.errorMessage}</h4>
+        </div>
+      </div>
+    );
+  } else if (dish != null) {
     return (
       <div className="container">
         <div className="row">
@@ -230,10 +277,15 @@ class DishDetail extends Component {
         </div>
         <div className="row mt-5">
           <RenderDish dish={dish} />
-          <RenderComments comments={comments} dish={dish} addComment={this.props.addComment} />
+          <RenderComments
+            comments={comments}
+            dish={dish}
+            addComment={props.addComment}
+          />
         </div>
       </div>
     );
   }
-}
+};
+
 export default DishDetail;
