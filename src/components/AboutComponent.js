@@ -9,32 +9,32 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 
-//
+
+
 function RenderLeader({ leader }) {
   return (
-    <Media>
-      <Media left href="#">
-        <Media object src={leader.image} alt={leader.name} />
+    <div key={leader.id} className="col-12 mt-5">
+    <Media tag="li">
+      <Media left middle>
+          <Media object src={leader.image} alt={leader.name} />
       </Media>
-      <Media body className="ml-5 mb-5">
+      <Media body className="ml-5">
         <Media heading>{leader.name}</Media>
-        <p>{leader.designation}</p>
+        <Media >  {leader.designation}  </Media><br/>
         <p>{leader.description}</p>
       </Media>
     </Media>
+  </div>
   );
 }
 
-//
+
+
+
+
 function About(props) {
   const leaders = props.leaders.map((leader) => {
-    return (
-      <div key={leader.id} className="row mt-1">
-        <div className="col-12">
-          <RenderLeader leader={leader} />
-        </div>
-      </div>
-    );
+    return <RenderLeader leader={leader} />;
   });
 
   return (
@@ -42,9 +42,7 @@ function About(props) {
       <div className="row">
         <Breadcrumb>
           <BreadcrumbItem>
-            <Link to="/home">
-              <i className="fa fa-home" aria-hidden="true"></i>
-            </Link>
+            <Link to="/home"><i className="fa fa-home" aria-hidden="true"></i></Link>
           </BreadcrumbItem>
           <BreadcrumbItem active>About Us</BreadcrumbItem>
         </Breadcrumb>
@@ -114,7 +112,9 @@ function About(props) {
         <div className="col-12">
           <h2>Corporate Leadership</h2>
         </div>
-        <div className="col-12">{leaders}</div>
+        <div className="col-12">
+          <Media list>{leaders}</Media>
+        </div>
       </div>
     </div>
   );

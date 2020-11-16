@@ -8,15 +8,14 @@ import {
   BreadcrumbItem,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import { Loading } from './LoadingComponent';
+import { Loading } from "./LoadingComponent";
+import { baseUrl } from '../shared/baseUrl';
 
-//
-function RenderMenuItem({ dish, onClick }) {
-
+function RenderMenuItem({ dish }) {
   return (
     <Card>
-      <Link to={{ pathname: "/menu/" + dish.id }}>
-        <CardImg width="100%" src={dish.image} alt={dish.name} />
+      <Link to={`/menu/${dish.id}`}>
+        <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
         <CardImgOverlay>
           <CardTitle>{dish.name}</CardTitle>
         </CardImgOverlay>
@@ -24,62 +23,50 @@ function RenderMenuItem({ dish, onClick }) {
     </Card>
   );
 }
-
-// Menu component
 const Menu = (props) => {
-  const menu = props.dishes.dishes.map((dish) => {
+  const message = () => {
+    if (props.isLoading) {
+      return (
+        <div className="container">
+          <div className="row">
+            <Loading />
+          </div>
+        </div>
+      );
+    } else if (props.errMess) {
+      return (
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <h4>{props.dishes.errMess}</h4>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  };
+  const menu = props.dishes.map((dish) => {
     return (
-      <div key={dish.id} className="col-12 col-md-5 m-1 mt-3">
-        <RenderMenuItem dish={dish} onClick={props.onClick} />
+      <div key={dish.id} className="col-12 col-md-5 m-l mt-3">
+        <RenderMenuItem dish={dish} />
       </div>
     );
   });
 
-
-  if (props.dishes.isLoading) {
-    return(
-        <div className="container">
-            <div className="row">            
-                <Loading />
-            </div>
-        </div>
-    );
-}
-else if (props.dishes.errorMessage) {
-    return(
-        <div className="container">
-            <div className="row"> 
-                <div className="col-12">
-                    <h4>{props.dishes.errorMessage}</h4>
-                </div>
-            </div>
-        </div>
-    );
-}
-  else {
-    //
   return (
-    <div className="container">
-      <div className="row">
+    <div>
+      <div className="container">
         <Breadcrumb>
           <BreadcrumbItem>
-            <Link to="/home">
-              <i className="fa fa-home" aria-hidden="true"></i>
-            </Link>
+            <Link to="/home"><i className="fa fa-home" aria-hidden="true"></i></Link>
           </BreadcrumbItem>
-          <BreadcrumbItem active>
-            Menu
-          </BreadcrumbItem>
+          <BreadcrumbItem active>Menu</BreadcrumbItem>
         </Breadcrumb>
-        <div className="col-12">
-          <h3>Menu</h3>
-          <hr />
-        </div>
+        <div className="row mt-3">{message()}</div>
+        <div className="row mt-3">{menu}</div>
       </div>
-      <div className="row mt-5">{menu}</div>
     </div>
   );
-  }
 };
 
 export default Menu;
