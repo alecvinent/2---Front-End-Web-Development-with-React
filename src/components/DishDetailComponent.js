@@ -17,6 +17,9 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import { LocalForm, Control, Errors } from "react-redux-form";
+import { FadeTransform, Fade, Stagger } from "react-animation-components";
+
+//
 import { Loading } from "./LoadingComponent";
 import { baseUrl } from '../shared/baseUrl';
 
@@ -147,14 +150,18 @@ class CommentForm extends Component {
 
 function RenderDish({ dish }) {
   return (
-    <Card className="col-12 col-md-5 m-2 mt-3">
-      <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name}></CardImg>
-      <CardTitle>
-        {" "}
-        <h2>{dish.name}</h2>
-      </CardTitle>
-      <CardText>{dish.description}</CardText>
-    </Card>
+    <FadeTransform in transformProps={{
+      exitTransform: 'scale(0.5) translateY(-50%)'
+    }}>
+      <Card>
+        <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name}></CardImg>
+        <CardTitle>
+          {" "}
+          <h2>{dish.name}</h2>
+        </CardTitle>
+        <CardText>{dish.description}</CardText>
+      </Card>
+    </FadeTransform>
   );
 }
 
@@ -166,32 +173,39 @@ function renderRating(rating) {
   return stars;
 }
 
-function RenderComments({ comments, postComment, dish }) {
-  const userComment = comments.map((comment) => {
+//
+function RenderComments({comments, postComment, dish}) {
+  //
+  if (comments != null) {
     return (
-      <div key={comment.id}>
-        <CardBody>
-          <p>{comment.comment}</p>
-          <p>
-            -- {comment.author} ,{" "}
-            {new Intl.DateTimeFormat("en-US", {
-              year: "numeric",
-              month: "short",
-              day: "2-digit",
-            }).format(new Date(Date.parse(comment.date)))}
-          </p>
-          <p>Rating: {renderRating(comment.rating)} </p>
-        </CardBody>
+      <div>
+        <ul className="list-unstyled">
+          <Stagger in>
+            {comments.map((comment) => {
+              return (
+                <Fade in>
+                  <li key={comment.id}>
+                    <blockquote className="blockquote text-right" key={comment.id}>
+                      <p className="mb-0">Rating: {renderRating(comment.rating)} </p>
+                      <p className="mb-0">{comment.comment}</p>
+                      <footer className="blockquote-footer"><i className="fa fa-user" aria-hidden="true"></i> {comment.author} <cite title="Source Title">{new Intl.DateTimeFormat("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "2-digit",
+                        }).format(new Date(Date.parse(comment.date)))}</cite></footer>
+                    </blockquote>                    
+                  </li>
+                </Fade>
+              );
+            })}
+          </Stagger>
+        </ul>
+        <CommentForm dishId={dish.id} postComment={postComment} />
       </div>
     );
-  });
-  return (
-    <div>
-      <div>{userComment}</div>
-      <CommentForm dishId={dish.id} postComment={postComment} />
-    </div>
-  );
-}
+  }
+};
+//
 
 const DishDetail = (props) => {
   if (props.isLoading) {
@@ -228,26 +242,31 @@ const DishDetail = (props) => {
             <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
           </Breadcrumb>
           <div className="row">
-            <RenderDish dish={dish} />
-            <Card className="col-6 col-md-5 m-2 mt-3">
-            <div>
-              <h4>
-                <i className="fa fa-comment-o" aria-hidden="true"></i> Comments about{" "}
-                <em>
-                  {props.dish.featured ? (
-                    <i className="fa fa-star" aria-hidden="true"></i>
-                  ) : (
-                    ""
-                  )}{" "}
-                  {props.dish.name}
-                </em>
-              </h4>
+            <div className="col-12 col-md-5 m-1">
+              <RenderDish dish={dish} />
             </div>
-              <RenderComments
-                comments={comments}
-                postComment={props.postComment}
-                dish={props.dish}
-              />
+            <Card className="col-12 col-md-5 m-1">
+              <CardBody>
+                <CardTitle tag="h5">
+                  <i className="fa fa-comment-o" aria-hidden="true"></i> Comments about{" "}
+                    <em>
+                      {props.dish.featured ? (
+                        <i className="fa fa-star" aria-hidden="true"></i>
+                      ) : (
+                        ""
+                      )}{" "}
+                      {props.dish.name}
+                    </em>
+                </CardTitle>
+              </CardBody>
+              <CardBody>
+                <RenderComments
+                    comments={comments}
+                    postComment={props.postComment}
+                    dish={props.dish}
+                  />
+              </CardBody>
+              
             </Card>
           </div>
         </div>

@@ -260,6 +260,14 @@
       "comment": "so yummy!!!",
       "date": "2020-11-16T04:35:58.183Z",
       "id": 27
+    },
+    {
+      "dishId": 0,
+      "rating": "2",
+      "author": "lolo",
+      "comment": "hola",
+      "date": "2020-11-16T19:42:42.560Z",
+      "id": 28
     }
   ],
   "promotions": [
