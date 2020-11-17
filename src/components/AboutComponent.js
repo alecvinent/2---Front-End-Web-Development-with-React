@@ -8,33 +8,62 @@ import {
   Media,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Fade, Stagger } from "react-animation-components";
+import { baseUrl } from "../shared/baseUrl";
+import { Loading } from "./LoadingComponent";
 
-
-
+//
 function RenderLeader({ leader }) {
   return (
-    <div key={leader.id} className="col-12 mt-5">
-    <Media tag="li">
-      <Media left middle>
-          <Media object src={leader.image} alt={leader.name} />
+    
+      <Media tag="li">
+            <Media left middle>
+                <Media object src={baseUrl + leader.image} alt={leader.name} />
+            </Media>
+            <Media body className="ml-5">
+              <Media heading>{leader.name}</Media>
+              <Media >  {leader.designation}  </Media><br/>
+              <p>{leader.description}</p>
+        </Media>
       </Media>
-      <Media body className="ml-5">
-        <Media heading>{leader.name}</Media>
-        <Media >  {leader.designation}  </Media><br/>
-        <p>{leader.description}</p>
-      </Media>
-    </Media>
-  </div>
   );
 }
 
-
-
-
-
 function About(props) {
+
+  console.log('About',props);
+  const message = () => {
+    if (props.isLoading) {
+      return (
+        <div className="container">
+          <div className="row">
+            <Loading />
+          </div>
+        </div>
+      );
+    } else if (props.errMess) {
+      return (
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <h4>{props.errMess}</h4>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+
   const leaders = props.leaders.map((leader) => {
-    return <RenderLeader leader={leader} />;
+    return (
+      <Stagger in>
+          {props.leaders.map(leader => (
+            <Fade in key={leader.id}>
+              <RenderLeader key={leader.id} leader={leader} />
+            </Fade>
+          ))}
+        </Stagger>
+    );
   });
 
   return (
@@ -112,6 +141,7 @@ function About(props) {
         <div className="col-12">
           <h2>Corporate Leadership</h2>
         </div>
+        <div className="col-12">{message()}</div>
         <div className="col-12">
           <Media list>{leaders}</Media>
         </div>
